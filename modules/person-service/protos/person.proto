@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package person;
+
+service PersonService {
+  rpc GetPerson(PersonRequest) returns (PersonReply);
+  rpc GetAllPersons(Empty) returns (PersonList);
+  rpc CreatePerson(PersonRequest) returns (PersonReply);
+}
+
+message PersonRequest {
+  int32 id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string company_name = 4;
+}
+
+message PersonReply {
+  int32 id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string company_name = 4;
+}
+
+message PersonList {
+  repeated PersonReply persons = 1;
+}
+
+message Empty {}
