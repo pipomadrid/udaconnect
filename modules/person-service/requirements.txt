@@ -8,8 +8,8 @@ Flask-RESTful==0.3.7
 flask-restplus==0.13.0
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.4.0
-grpcio==1.67.0
-grpcio-tools==1.67.0
+grpcio
+grpcio-tools
 itsdangerous==1.1.0
 Jinja2==2.11.2
 jsonschema==3.0.2

@@ -7,6 +7,8 @@ RUN apk add --no-cache gcc musl-dev linux-headers geos libc-dev postgresql-dev
 
 # Copy requirements and install Python dependencies
 COPY requirements.txt requirements.txt
+
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 

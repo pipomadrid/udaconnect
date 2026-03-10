@@ -7,10 +7,11 @@ metadata:
 spec:
   ports:
   - name: http
-    containerPort: 5001
+    port: 5001
     targetPort: 5001
   - name: grpc
-    containerPort: 5005
+    port: 5005
+    targetPort: 5005	
     nodePort: 30002
   selector:
     service: udaconnect-person
@@ -33,7 +34,7 @@ spec:
         service: udaconnect-person
     spec:
       containers:
-      - image: pedrosaez/udaconnect-person:latest
+      - image: pedrosaez/udaconnect-person:last
         name: udaconnect-person
         imagePullPolicy: Always
         env:
