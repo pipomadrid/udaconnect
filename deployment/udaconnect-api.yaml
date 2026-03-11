@@ -60,4 +60,6 @@ spec:
             configMapKeyRef:
               name: db-env
               key: DB_PORT
+        - name: PERSON_SERVICE_HOST
+          value: "udaconnect-person"
       restartPolicy: Always
