@@ -1,5 +1,5 @@
 aniso8601==9.0.1
-attrs==21.4.0
+attrs==23.2.0
 Click==8.1.7
 Flask==2.2.5
 flask-accepts==0.18.2
