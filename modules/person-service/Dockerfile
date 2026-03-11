@@ -3,7 +3,12 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Install system dependencies
-RUN apk add --no-cache gcc musl-dev linux-headers geos libc-dev postgresql-dev
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libc6-dev \
+    libgeos-dev \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*ql-dev
 
 # Copy requirements and install Python dependencies
 COPY requirements.txt requirements.txt
