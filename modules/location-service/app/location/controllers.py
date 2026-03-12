@@ -1,36 +1,27 @@
 from typing import List
 
-from app.person.models import Person
-from app.person.schemas import PersonSchema
-from app.person.services import PersonService
+from app.location.models import Location
+from app.location.schemas import LocationSchema
+from app.location.services import LocationService 
 from flask import request
 from flask_accepts import accepts, responds
 from flask_restx import Namespace, Resource
 
-api = Namespace("Person", description="Person management service.")  # noqa
+api = Namespace("Location", description="Location management service.")  # noqa
 
 
-@api.route("/persons")
-class PersonsResource(Resource):
-    @accepts(schema=PersonSchema)
-    @responds(schema=PersonSchema)
-    def post(self) -> Person:
-        """Create a new person."""
-        payload = request.get_json()
-        new_person: Person = PersonService.create(payload)
-        return new_person
+@api.route("/locations")
+@api.route("/locations/<location_id>")
+@api.param("location_id", "Unique ID for a given Location", _in="query")
+class LocationResource(Resource):
+    @accepts(schema=LocationSchema)
+    @responds(schema=LocationSchema)
+    def post(self) -> Location:
+        request.get_json()
+        location: Location = LocationService.create(request.get_json())
+        return location
 
-    @responds(schema=PersonSchema, many=True)
-    def get(self) -> List[Person]:
-        """Retrieve all persons."""
-        persons: List[Person] = PersonService.retrieve_all()
-        return persons
-
-
-@api.route("/persons/<int:person_id>")
-class PersonResource(Resource):
-    @responds(schema=PersonSchema)
-    def get(self, person_id: int) -> Person:
-        """Retrieve a person by ID."""
-        person: Person = PersonService.retrieve(person_id)
-        return person
+    @responds(schema=LocationSchema)
+    def get(self, location_id) -> Location:
+        location: Location = LocationService.retrieve(location_id)
+        return location

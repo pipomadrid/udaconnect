@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from datetime import datetime
 
 from app import db  # noqa
@@ -58,7 +57,17 @@ class Location(db.Model):
         return coord_text[coord_text.find("(") + 1 : coord_text.find(" ")]
 
 
-@dataclass
-class Connection:
-    location: Location
-    person: Person
+class Connection(db.Model):
+    __tablename__ = "connection"
+
+    id = db.Column(db.Integer, primary_key=True)
+    person_id = db.Column(db.Integer, db.ForeignKey("person.id"), nullable=False)
+    exposed_person_id = db.Column(db.Integer, db.ForeignKey("person.id"), nullable=False)
+    location_id = db.Column(db.Integer, db.ForeignKey("location.id"), nullable=False)
+    creation_time = db.Column(db.DateTime, nullable=False)
+
+    def __init__(self, person_id, exposed_person_id, location_id, creation_time):
+        self.person_id = person_id
+        self.exposed_person_id = exposed_person_id
+        self.location_id = location_id
+        self.creation_time = creation_time

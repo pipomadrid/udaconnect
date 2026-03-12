@@ -1,5 +1,5 @@
-from app.location.models import Person  # noqa
-from app.location.schemas import PersonSchema  # noqa
+from app.location.models import Location  # noqa
+from app.location.schemas import LocationSchema  # noqa
 
 
 def register_routes(api, app, root="api"):

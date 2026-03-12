@@ -31,3 +31,7 @@ CREATE TABLE connection (
 
 CREATE INDEX connection_person_idx ON connection (person_id);
 CREATE INDEX connection_exposed_person_idx ON connection (exposed_person_id);
+
+ALTER TABLE connection
+ADD CONSTRAINT unique_connection
+UNIQUE(person_id, exposed_person_id, location_id);

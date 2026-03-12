@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 from datetime import datetime
 
 from app import db  # noqa
@@ -19,7 +18,7 @@ class Person(db.Model):
     last_name = Column(String, nullable=False)
     company_name = Column(String, nullable=False)
 
-    
+
 class Location(db.Model):
     __tablename__ = "location"
 
