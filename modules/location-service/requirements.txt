@@ -25,3 +25,7 @@ SQLAlchemy==1.4.52
 Werkzeug==2.2.3
 protobuf==5.29.0
 kafka-python==2.0.2
+GeoAlchemy2==0.14.3
+shapely==2.0.3
+
+

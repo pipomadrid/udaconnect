@@ -31,7 +31,7 @@ spec:
         service: udaconnect-connections
     spec:
       containers:
-      - image: pedrosaez/udaconnect-connections:last
+      - image: pedrosaez/udaconnect-connections:1.0.0
         name: udaconnect-connections
         imagePullPolicy: Always
         env:

@@ -31,7 +31,7 @@ spec:
         service: udaconnect-location
     spec:
       containers:
-      - image: pedrosaez/udaconnect-location:last
+      - image: pedrosaez/udaconnect-location:1.0.0
         name: udaconnect-location
         imagePullPolicy: Always
         env:

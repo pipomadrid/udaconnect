@@ -34,7 +34,7 @@ spec:
         service: udaconnect-person
     spec:
       containers:
-      - image: pedrosaez/udaconnect-person:last
+      - image: pedrosaez/udaconnect-person:1.0.0
         name: udaconnect-person
         imagePullPolicy: Always
         env:

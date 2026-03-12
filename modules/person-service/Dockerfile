@@ -19,8 +19,8 @@ RUN pip install -r requirements.txt
 
 # Expose ports
 # 5001: Flask HTTP
-# 50051: gRPC
-EXPOSE 5001 50051
+# 5005: gRPC
+EXPOSE 5001 5005
 
 COPY . .
 # Run the application

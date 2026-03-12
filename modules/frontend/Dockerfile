@@ -1,14 +1,18 @@
 FROM node:24.1.0-alpine
 
-WORKDIR .
+WORKDIR /app
 
 COPY package.json ./
 
 RUN npm install
 RUN npm install react-scripts@5.0.1 -g
 
-CMD ["pwd"]
 COPY . ./
+
+
+# Establecer variables para no abrir navegador
+ENV BROWSER=none
+ENV HOST=0.0.0.0
 
 EXPOSE 3000
 
