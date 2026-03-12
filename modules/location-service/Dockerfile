@@ -17,11 +17,8 @@ RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 
-# Expose ports
-# 5001: Flask HTTP
-# 50051: gRPC
-EXPOSE 5001 50051
+EXPOSE 5002 
 
 COPY . .
 # Run the application
-CMD ["python", "wsgi.py"]
+CMD ["flask", "run", "--host", "0.0.0.0", "--port", "5002"]

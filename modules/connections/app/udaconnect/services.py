@@ -80,12 +80,16 @@ class ConnectionService:
             )
             location.set_wkt_with_coords(lat, lng)
 
-            result.append(
-            Connection(
-                person=person_map[exposed_person_id],
-                location=location
+            conn = Connection(
+                person_id=person_id,
+                exposed_person_id=exposed_person_id,
+                location_id=location_id,
+                creation_time=time
             )
-        )
+        
+            conn.person = person_map[exposed_person_id]
+            conn.location = location
             
+            result.append(conn)
         return result
 
