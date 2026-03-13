@@ -40,56 +40,27 @@ class ConnectionService:
         except Exception as e:
             logger.error(f"Error fetching persons via gRPC: {str(e)}")
             raise
-
-
-
+    
+        
     @staticmethod
     def find_contacts(person_id: int, start_date: datetime, end_date: datetime, meters=5
     ) -> List[Connection]:
     
-        person_map: Dict[str, Person] = ConnectionService._get_grpc_persons()
+        connections: List[Connection] = db.session.query(Connection).join(Location).filter(
+            Connection.person_id == person_id,
+            Location.creation_time >= start_date,
+            Location.creation_time < end_date
+        ).all()
 
-        query = text("""
-            SELECT c.exposed_person_id,
-                l.id,
-                ST_X(l.coordinate),
-                ST_Y(l.coordinate),
-                l.creation_time
-            FROM connection c
-            JOIN location l ON c.location_id = l.id
-            WHERE c.person_id = :person_id
-            AND l.creation_time >= :start_date
-            AND l.creation_time <= :end_date
-        """)
-        
-        result: List[Connection] = []
+        person_ids = {conn.exposed_person_id for conn in connections}
+        persons_map: Dict[int, Person] = {
+            person.id: person
+            for person in db.session.query(Person).filter(Person.id.in_(person_ids)).all()
+        }
 
-        rows = db.engine.execute(
-            query,
-            person_id=person_id,
-            start_date=start_date,
-            end_date=end_date
-        )   
+        for conn in connections:
+            conn.person = persons_map.get(conn.exposed_person_id)
+            conn.location = db.session.query(Location).get(conn.location_id)
 
-        for exposed_person_id, location_id, lat, lng, time in rows:
-
-            location = Location(
-                id=location_id,
-                person_id=exposed_person_id,
-                creation_time=time
-            )
-            location.set_wkt_with_coords(lat, lng)
-
-            conn = Connection(
-                person_id=person_id,
-                exposed_person_id=exposed_person_id,
-                location_id=location_id,
-                creation_time=time
-            )
-        
-            conn.person = person_map[exposed_person_id]
-            conn.location = location
-            
-            result.append(conn)
-        return result
+        return connections
 
