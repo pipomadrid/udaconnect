@@ -21,7 +21,7 @@ metadata:
     service: udaconnect-location
   name: udaconnect-location
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       service: udaconnect-location
@@ -61,5 +61,7 @@ spec:
               name: db-env
               key: DB_PORT
         - name: KAFKA_BOOTSTRAP_SERVERS
-          value: "kafka-broker:9092"
+          value: "redpanda:9092"
+        - name: LOCATION_TOPIC
+          value: location-created
       restartPolicy: Always

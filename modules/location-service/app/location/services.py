@@ -10,12 +10,12 @@ from sqlalchemy.sql import text
 from app.location.models import Location
 from app.location.schemas import LocationSchema
 
-logging.basicConfig(level=logging.WARNING)
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("location-service")
 
 
 producer = KafkaProducer(
-    bootstrap_servers=[os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'kafka-broker:9092')],
+    bootstrap_servers=[os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'redpanda:9092')],
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
@@ -55,16 +55,17 @@ class LocationService:
         new_location.coordinate = ST_Point(location["latitude"], location["longitude"])        
         db.session.add(new_location)
         db.session.commit()
-
+        logger.info(f"Location Saved")
         try:
             event_data = {
                 "location_id": new_location.id,
                 "person_id": new_location.person_id,
-                "lat": location["latitude"],
-                "lng": location["longitude"],
+                "latitude": location["latitude"],
+                "longitude": location["longitude"],
                 "creation_time": new_location.creation_time.isoformat()
 
             }
+            logger.info(f"Producing to Kafka topic location-created: {event_data}")
             producer.send(
                 "location-created",
                  key=str(new_location.person_id).encode(),

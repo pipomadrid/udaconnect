@@ -4,11 +4,13 @@ import logging
 from kafka import KafkaConsumer
 from sqlalchemy.sql import text
 from app import db
+from app import create_app
 
-logging.basicConfig(level=logging.INFO)
+
+logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger("location-consumer")
 
-KAFKA_SERVER = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka-broker:9092")
+KAFKA_SERVER = os.getenv('KAFKA_BOOTSTRAP_SERVERS', 'redpanda:9092')
 TOPIC = "location-created"
 
 consumer = KafkaConsumer(
@@ -68,9 +70,10 @@ def process_location_event(event):
 
 def consume():
     logger.info("Starting Kafka consumer...")
-
+    app = create_app()
     for message in consumer:
         event = message.value
         logger.info(f"Received event: {event}")
-
-        process_location_event(event)
+        
+        with app.app_context():
+            process_location_event(event)

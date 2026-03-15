@@ -19,6 +19,33 @@ spec:
         args: ["run_consumer.py"]
         env:
         - name: KAFKA_BOOTSTRAP_SERVERS
-          value: kafka-broker:9092
+          value: redpanda:9092
         - name: DB_HOST
           value: postgres
+        - name: DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DB_PASSWORD
+        - name: DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_NAME
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: db-env
+              key: DB_PORT
+        - name: PERSON_SERVICE_HOST
+          value: "udaconnect-person"
