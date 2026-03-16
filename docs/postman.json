@@ -1,0 +1,161 @@
+{
+  "info": {
+    "_postman_id": "b8cc25d5-154c-4bb0-ac67-b1f7c09b9616",
+    "name": "UdaConnect API Collection",
+    "description": "API collection for UdaConnect microservices (Person, Connections, Location).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "46253561"
+  },
+  "item": [
+    {
+      "name": "Person Service",
+      "item": [
+        {
+          "name": "Get All Persons",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:30002/api/persons",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "30002",
+              "path": [
+                "api",
+                "persons"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Person",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"first_name\": \"Peter\", \"last_name\": \"Parker\", \"company_name\": \"Daily Bugle\"}"
+            },
+            "url": {
+              "raw": "http:/localhost:30002/api/persons",
+              "host": [
+                "http"
+              ],
+              "port": "",
+              "path": [
+                "localhost:30002",
+                "api",
+                "persons"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Location Service",
+      "item": [
+        {
+          "name": "Ingest Location",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"person_id\": 1, \"longitude\": -122.41, \"latitude\": 37.77, \"coordinate_time\": \"2026-03-16T13:00:00Z\"}"
+            },
+            "url": {
+              "raw": "http://localhost:30003/api/locations",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "30003",
+              "path": [
+                "api",
+                "locations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Location",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:30003/api/locations/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "30003",
+              "path": [
+                "api",
+                "locations",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Connections Service",
+      "item": [
+        {
+          "name": "Get Connections",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:30001/api/persons/1/connection?start_date=2026-03-01&end_date=2026-03-16&distance=5",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "30001",
+              "path": [
+                "api",
+                "persons",
+                "1",
+                "connection"
+              ],
+              "query": [
+                {
+                  "key": "start_date",
+                  "value": "2026-03-01"
+                },
+                {
+                  "key": "end_date",
+                  "value": "2026-03-16"
+                },
+                {
+                  "key": "distance",
+                  "value": "5"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

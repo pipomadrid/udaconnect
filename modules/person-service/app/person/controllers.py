@@ -28,6 +28,7 @@ class PersonsResource(Resource):
 
 
 @api.route("/persons/<int:person_id>")
+@api.param("person_id", "Unique identifier of the person")
 class PersonResource(Resource):
     @responds(schema=PersonSchema)
     def get(self, person_id: int) -> Person:

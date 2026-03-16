@@ -1,0 +1,35 @@
+I have choose this architecture because utilizes a decoupled, event-driven microservices pattern.
+By separating the system into specialized services (Person, Connections, and Location), you isolate concerns.
+
+The integration of Apache Kafka enabling asynchronous communication between services and gRPC provides a high-performance channel for direct service-to-service data requests.
+
+Asynchronous Communication (Kafka)
+Used for: Location Service → Connections Service.
+
+	-Location updates are high-frequency. Using Apache Kafka allows the system to decouple the ingestion (Location) from the processing (Connections).
+
+	Benefits:
+
+		Backpressure Handling: Kafka buffers events if the Connection service is busy, preventing data loss.
+
+		Scalability: You can scale consumers horizontally without impacting the ingestion speed.	
+
+		Fault Tolerance: If the Connection service goes down, location data is safely stored in the Kafka topic and can be re-processed once the service recovers.
+
+Synchronous Communication (gRPC)
+Used for: Connections Service → Person Service.
+
+ 	-The Connection service needs immediate, structured information about a "Person" (name, company) to enrich the data it has just processed. gRPC is chosen here over REST.
+
+	Benefits:
+
+		Low Latency: Is significantly faster than JSON-over-HTTP.
+
+		Type Safety: The .proto definitions ensure that both services strictly adhere to the same data contract.
+
+		Efficiency: Multiplexing capabilities allow multiple requests over a single connection, reducing overhead for high-frequency internal calls.
+
+Frontend → Services	
+REST (HTTP)	
+
+	-Standardized, easy browser compatibility, stateless.

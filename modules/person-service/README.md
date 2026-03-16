@@ -1,42 +1,43 @@
 # Person Microservice
 
-Microservicio para la gestión de personas en UdaConnect. Comunica con el exterior mediante HTTP (REST) y con otros microservicios mediante gRPC.
+Microservice for managing people within the UdaConnect ecosystem. It provides an interface for external clients via REST and internal communication via gRPC.
 
-## Características
+## Features
 
-- **REST API**: Endpoints HTTP para CRUD de personas
-- **gRPC Server**: Servicio gRPC para comunicación interna con ConnectionService
-- **SQLAlchemy ORM**: Acceso a base de datos
-- **Flask**: Framework web
+- **REST API**: HTTP endpoints for Person CRUD operations.
+- **gRPC Server**: Internal service for high-performance communication with ConnectionService.
+- **SQLAlchemy ORM**: Database access and management.
+- **Flask**: Web framework for the API layer.
 
-## Puertos
+## Ports
 
 - **5001**: HTTP/REST API
-- **50051**: gRPC Server
+- **5005**: gRPC Server
 
-## Estructura
+## Structure
 
 ```
 app/
-├── __init__.py           # Factory de Flask
-├── config.py             # Configuración
-├── grpc_server.py        # Servidor gRPC
+├── __init__.py           # Flask App Factory and initialization
+├── config.py             # Environment-based configuration logic
+├── grpc_server.py        # Implementation of the gRPC server listener
 └── person/
     ├── __init__.py
-    ├── models.py         # Modelo de base de datos
-    ├── schemas.py        # Schemas de validación (Marshmallow)
-    ├── services.py       # Lógica de negocio
-    ├── routes.py         # Rutas REST
-    └── grpc_handler.py   # Handlers de gRPC
+    ├── models.py         # SQLAlchemy Database models (Person entity)
+    ├── schemas.py        # Marshmallow schemas for serialization/validation
+    ├── services.py       # Core business logic (CRUD operations)
+    ├── routes.py         # RESTful API endpoint definitions
+    └── grpc_handler.py   # gRPC service implementation (servicer)
 protos/
-└── person.proto          # Definiciones de gRPC
-
-wsgi.py                  # Entry point
-requirements.txt
-Dockerfile
+└── person.proto          # Protocol Buffer definitions
+wsgi.py                   # Main entry point for the application
+requirements.txt          # Python dependencies
+Dockerfile                # Containerization manifest
 ```
 
-## Compilar gRPC
+##  Getting Started
+
+## 1. Compile gRPC Definitions
 
 ```bash
 python -m grpc_tools.protoc \
@@ -46,73 +47,62 @@ python -m grpc_tools.protoc \
     ./protos/person.proto
 ```
 
-## Ejecutar localmente
+## Local Setup
 
 ```bash
-# Instalar dependencias
+# Install dependencies
 pip install -r requirements.txt
 
-# Variables de entorno
-export DB_USERNAME=postgres
-export DB_PASSWORD=postgres
-export DB_HOST=localhost
-export DB_PORT=5432
-export DB_NAME=udaconnect
-export FLASK_PORT=5001
-export GRPC_PORT=50051
-
-# Ejecutar
+# Run the service
 python wsgi.py
 ```
 
 ## Endpoints REST
 
 ### GET /api/persons
-Obtiene todas las personas.
+Get all persons
 
 ```bash
 curl http://localhost:5001/api/persons
 ```
 
 ### POST /api/persons
-Crea una nueva persona.
+Create new person
 
 ```bash
 curl -X POST http://localhost:5001/api/persons \
   -H "Content-Type: application/json" \
   -d '{
-    "first_name": "John",
-    "last_name": "Doe",
-    "company_name": "Acme"
+    "first_name": "Peter",
+    "last_name": "Parker",
+    "company_name": "Daily Bugle"
   }'
 ```
 
 ### GET /api/persons/<person_id>
-Obtiene una persona por ID.
-
+Get person by id
 ```bash
 curl http://localhost:5001/api/persons/1
 ```
 
-## gRPC
+## Internal Communication (gRPC)
 
-El servicio implementa los siguientes métodos gRPC:
+The gRPC server facilitates high-speed data exchange with the Connection Service. It implements the following methods:
 
-- `GetPerson(PersonRequest)`: Obtiene una persona por ID
-- `GetAllPersons(Empty)`: Obtiene todas las personas
-- `CreatePerson(PersonRequest)`: Crea una nueva persona
+- `GetPerson(PersonRequest)`: Retrieves person data by ID
+- `GetAllPersons(Empty)`: Streams or returns all persons
+- `CreatePerson(PersonRequest)`: Internal creation of profiles
 
-## Docker
+## Containerization
 
 ```bash
-# Build
+# Build Image
 docker build -t person-service:latest .
+```
 
-# Run
-docker run -p 5001:5001 -p 50051:50051 \
-  -e DB_HOST=postgres \
-  -e DB_USERNAME=postgres \
-  -e DB_PASSWORD=postgres \
-  -e DB_NAME=udaconnect \
-  person-service:latest
+## Deploying to Cluster
+
+```bash
+# Apply the deployment and service manifests
+kubectl apply -f deployment/udaconnect-person.yaml
 ```

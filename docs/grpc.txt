@@ -1,0 +1,40 @@
+Service Name: person-Service
+
+Port: 5005 (Internal ClusterIP)
+
+The Person Service provides high-performance, low-latency access to attendee data, enabling internal services (like the Connections Service) 
+to retrieve or create person profiles without the overhead of HTTP/REST.
+
+Methods:
+
+GetPerson
+    -Retrieves detailed information for a specific person by ID.
+
+GetAllPersons
+    -Returns a list of all registered persons in the system.
+
+CreatePerson
+    -Creates a new person record and returns the created profile.
+
+    
+Internal Testing (Accessing from within the Cluster)
+
+    -Since this service does not have a NodePort and is internal-only, you must access it from within the Kubernetes cluster (from another pod or via port-forwarding for debugging).
+
+
+Testing via Port-Forwarding (Debug Mode)
+    -To test the gRPC methods from your local machine, tunnel the internal port:
+
+        1. Start the tunnel:
+             kubectl port-forward svc/udaconnect-person 5005:5005
+
+        2. Run requests using grpcurl (ensure grpcurl is installed):
+
+            # Test GetPerson
+                grpcurl -plaintext -d '{"id": 1}' localhost:5005 person.PersonService/GetPerson
+
+            # Test GetAllPersons
+                grpcurl -plaintext localhost:5005 person.PersonService/GetAllPersons
+
+            # Test CreatePerson
+                grpcurl -plaintext -d '{"first_name": "Peter", "last_name": "Parker", "company_name": "Daily Bugle"}' localhost:5005 person.PersonService/CreatePerson
